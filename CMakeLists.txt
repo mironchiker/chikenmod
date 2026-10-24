@@ -29,6 +29,7 @@ set(DOBBY_LIB ${DOBBY_DIR}/${ANDROID_ABI}/libdobby.a)
 target_link_libraries(chickenmod
     PRIVATE
     ${DOBBY_LIB}
+    android
     log
     EGL
     GLESv3
