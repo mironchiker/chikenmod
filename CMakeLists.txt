@@ -1,44 +1,35 @@
-cmake_minimum_required(VERSION 3.22.1)
-project("chickenmod")
+cmake_minimum_required(VERSION 3.10.2)
+project(chickenmod)
 
-# Реальные пути из reveny репо
-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/imgui/app/src/main/jni/Include/ImGui)
-set(DOBBY_DIR ${CMAKE_SOURCE_DIR}/imgui/app/src/main/jni/Include/Dobby)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include/ImGui
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include/ImGui/backends
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include/Dobby
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include/KittyMemory
+)
 
 add_library(chickenmod SHARED
     main.cpp
-    ${IMGUI_DIR}/imgui.cpp
-    ${IMGUI_DIR}/imgui_draw.cpp
-    ${IMGUI_DIR}/imgui_tables.cpp
-    ${IMGUI_DIR}/imgui_widgets.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_android.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+    imgui/app/src/main/jni/Include/ImGui/imgui.cpp
+    imgui/app/src/main/jni/Include/ImGui/imgui_draw.cpp
+    imgui/app/src/main/jni/Include/ImGui/imgui_tables.cpp
+    imgui/app/src/main/jni/Include/ImGui/imgui_widgets.cpp
+    imgui/app/src/main/jni/Include/ImGui/backends/imgui_impl_android.cpp
+    imgui/app/src/main/jni/Include/ImGui/backends/imgui_impl_opengl3.cpp
 )
 
-# Dobby уже есть в репо!
-add_library(dobby STATIC IMPORTED)
-set_target_properties(dobby PROPERTIES
-    IMPORTED_LOCATION
-    ${DOBBY_DIR}/${ANDROID_ABI}/libdobby.a
-)
-
-target_include_directories(chickenmod PRIVATE
-    ${IMGUI_DIR}
-    ${IMGUI_DIR}/backends
-    ${DOBBY_DIR}
-    ${CMAKE_SOURCE_DIR}
-)
-
-target_compile_options(chickenmod PRIVATE
-    -std=c++17
-    -O2
-    -fvisibility=hidden
-)
+set(DOBBY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui/app/src/main/jni/Include/Dobby)
+set(DOBBY_LIB ${DOBBY_DIR}/${ANDROID_ABI}/libdobby.a)
 
 target_link_libraries(chickenmod
-    dobby
-    android
+    PRIVATE
+    ${DOBBY_LIB}
     log
     EGL
-    GLESv2
+    GLESv3
 )
