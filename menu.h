@@ -8,10 +8,7 @@ inline void DrawChamsMenu() {
     ImGui::Begin("ChickenGun Mod", nullptr,
                  ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-    // ═══════════════════════════
-    //  CHAMS
-    // ═══════════════════════════
-    ImGui::SeparatorText("  Chams  ");
+    ImGui::Separator(); ImGui::Text("Chams"); ImGui::Separator();
 
     int cm = GetChamsMode();
     if (ImGui::Combo("Mode##chams", &cm, kChamsModes, kChamsModeCount))
@@ -19,7 +16,6 @@ inline void DrawChamsMenu() {
 
     bool isVisMode = (cm == 5 || cm == 6 || cm == 7);
 
-    // Цвет/радуга — только для не-visibility режимов
     if (!isVisMode) {
         static float col[3] = {1.f, 1.f, 1.f};
         if (ImGui::ColorEdit3("Color##chams", col))
@@ -33,16 +29,11 @@ inline void DrawChamsMenu() {
     if (ImGui::SliderFloat("Line Width", &lw, 1.f, 30.f))
         g_lineWidth = lw;
 
-    // ═══════════════════════════
-    //  VISIBLE / WALLS
-    //  только для режимов 5, 6, 7
-    // ═══════════════════════════
     if (isVisMode) {
         ImGui::Spacing();
-        ImGui::SeparatorText("  Visibility Colors  ");
+        ImGui::Separator(); ImGui::Text("Visibility Colors"); ImGui::Separator();
         ImGui::Spacing();
 
-        // --- Visible (GREEN default) ---
         static float visCol[3]  = {0.f, 1.f, 0.f};
         static bool  visInited  = false;
         if (!visInited) {
@@ -59,7 +50,6 @@ inline void DrawChamsMenu() {
 
         ImGui::Spacing();
 
-        // --- Walls (RED default) ---
         static float wallCol[3] = {1.f, 0.f, 0.f};
         static bool  wallInited = false;
         if (!wallInited) {
@@ -67,7 +57,7 @@ inline void DrawChamsMenu() {
             wallInited = true;
         }
 
-        ImGui::TextColored(ImVec4(1.f,0.2f,0.2f,1.f), "Walls  ");
+        ImGui::TextColored(ImVec4(1.f,0.2f,0.2f,1.f), "Walls");
         ImGui::SameLine(90);
         if (ImGui::ColorEdit3("##wall", wallCol,
                 ImGuiColorEditFlags_NoLabel)) {
@@ -76,7 +66,6 @@ inline void DrawChamsMenu() {
 
         ImGui::Spacing();
 
-        // Превью
         ImGui::Text("Preview:");
         ImGui::SameLine();
         ImGui::ColorButton("##prevVis",
@@ -90,11 +79,8 @@ inline void DrawChamsMenu() {
         ImGui::SameLine(); ImGui::Text("Wall");
     }
 
-    // ═══════════════════════════
-    //  SHADER FINDER
-    // ═══════════════════════════
     ImGui::Spacing();
-    ImGui::SeparatorText("  Shader Finder  ");
+    ImGui::Separator(); ImGui::Text("Shader Finder"); ImGui::Separator();
 
     static char shaderBuf[64] = "u_MVPMatrix";
     ImGui::InputText("Uniform##sh", shaderBuf, sizeof(shaderBuf));
